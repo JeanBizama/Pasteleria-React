@@ -1,0 +1,143 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1; /* utiliza el espacio disponible y empuja el footer hacia el final*/
+}
+
+.nav-body{
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	padding: 10px;
+	background-color: #947259; 
+	color: #F5EFE6
+}
+
+/* separate category filter from fixed header so it doesn't visually merge */
+.nav-body#categoryFilter {
+	margin-top: 24px; /* push the category bar down a bit more */
+	padding-top: 6px;
+}
+
+.nav-body a{
+	text-decoration: none;
+	color: #F5EFE6;
+	font-weight: bold;
+	transition: color 0.3s ease;
+}
+
+.nav-body a:hover {
+	color: #FFC0CB; 
+}
+
+footer {
+	background-color: #5F4B3C;
+	color: #fff;
+	padding: 15px;
+	text-align: center;
+	border-top: 2px solid #947259;
+}
+
+header {
+	height: 100px;
+}
+
+body {
+	/* reduce top padding to match main global value */
+	padding-top: 60px;
+}
+
+.product-detail-container {
+	background-color: #fff7eb;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+}
+
+/* product grid card spacing: give cards a bit more bottom padding so the category bar sits closely above */
+.products-container {
+	margin-top: 12px; /* bring the products grid a bit closer to the filter bar */
+}
+.products-container .product-item {
+	padding: 18px 16px 28px; /* more bottom padding so the button has breathing room */
+}
+
+#productDetail {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.product-image {
+	max-width: 300px;
+	height: auto;
+	border-radius: 5px;
+}
+
+.product-details {
+	flex-grow: 1;
+}
+
+.product-details h3 {
+	font-size: 1.5rem;
+	margin: 0 0 10px;
+	color: #6b4e31;
+}
+
+.product-details p {
+	margin: 5px 0;
+	line-height: 1.5;
+}
+
+.product-price {
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #8b5a2b;
+}
+
+.product-actions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin-top: 15px;
+}
+
+.quantity-input {
+	width: 60px;
+	padding: 5px;
+	border: 1px solid #e9897e;
+	border-radius: 3px;
+}
+
+.add-to-cart {
+	background-color: #e9897e; 
+	color: white;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 3px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.add-to-cart:hover {
+	background-color: #d66b63; 
+}
+
+.back-button {
+	color: #6b4e31;
+	text-decoration: none;
+	font-weight: bold;
+	padding: 8px 15px;
+	border: 1px solid #6b4e31;
+	border-radius: 3px;
+	background-color: transparent;
+}
+
+.back-button:hover {
+	background-color: #f0e0d0; 
+}

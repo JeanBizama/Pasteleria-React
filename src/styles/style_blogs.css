@@ -1,0 +1,83 @@
+/* Estilos para la página de blogs */
+.blogs-main-content {
+	/* keep a modest offset to avoid header overlap but reduce excessive blank space */
+	padding-top: 60px; /* Ajusta para evitar solapamiento con el header fijo */
+	background-color: #FFF5E1; 
+	min-height: calc(100vh - 80px); 
+}
+
+.blogs-container {
+	max-width: 900px;
+	margin: 40px auto;
+	padding: 20px;
+	background-color: #fff7eb; 
+	border-radius: 12px; 
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra sutil como en nosotros-container */
+}
+
+.blogs-container h1 {
+	text-align: center;
+	text-transform: uppercase;
+	color: #5F4B3C; /* Marrón oscuro para títulos */
+	margin-bottom: 40px;
+	font-family: "Pacifico", cursive; /* Consistente con tus títulos */
+}
+
+.blog-case {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	padding: 20px;
+	background-color: #fffbf6; 
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra sutil como en nosotros-container */
+	border-radius: 12px; 
+	margin-bottom: 20px; 
+}
+
+.case-text {
+	flex: 1;
+}
+
+.case-text h2 {
+	color: #5F4B3C; /* Marrón oscuro para títulos */
+	margin-bottom: 10px;
+	font-family: "Pacifico", cursive;
+}
+
+.case-text p {
+	color: #7A695B; 
+	margin-bottom: 15px;
+	font-size: 0.9em;
+	font-family: "Lato", sans-serif; /* Consistente con el body */
+}
+
+.case-button {
+	padding: 10px 20px;
+	background-color: #E9897E; 
+	color: #FFF5E1; 
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.case-button:hover {
+	background-color: #d1756a; 
+}
+
+.case-image {
+	flex: 0 0 300px; /* Ancho fijo en desktop */
+	height: 200px;
+	border: 1px solid #E0D2C0; /* Borde crema para consistencia */
+	border-radius: 5px;
+	position: relative;
+	overflow: hidden; /* Evita que la imagen desborde */
+}
+
+.case-image img {
+	width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+	height: 100%; /* La imagen ocupa toda la altura del contenedor */
+	object-fit: cover; /* Ajusta la imagen manteniendo proporciones, recortando si es necesario */
+	border-radius: 4px; /* Ajuste para que no se salga del borde redondeado */
+}
