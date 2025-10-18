@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/style.css';
+import logo from '../logo.png';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
@@ -30,7 +31,10 @@ export default function Header(){
     <header>
       <div className="nav-links">
         <div className="left-header">
-          <p>&#9724; Pasteleria Mil Sabores</p>
+          <div className="brand">
+            <img src={logo} alt="Mil Sabores" />
+            <span>Mil Sabores</span>
+          </div>
         </div>
         <div className="middle-header">
           <nav>
@@ -42,10 +46,12 @@ export default function Header(){
           </nav>
         </div>
         <div className="user-header" id="userHeader" style={{display:'flex', alignItems:'center', gap:10}}>
-          <Link to="/carrito" className="no-sep" style={{marginRight:8, display:'inline-flex', alignItems:'center', position:'relative'}}>
-            <span className="material-symbols-outlined">shopping_cart</span>
-            {totalItems() > 0 && <span id="cartBadge" style={{position:'absolute', top:-6, right:-6, background:'#e74c3c', color:'#fff', borderRadius:10, padding:'2px 6px', fontSize:12}}>{totalItems()}</span>}
-          </Link>
+          {user && (
+            <Link to="/carrito" className="no-sep" style={{marginRight:8, display:'inline-flex', alignItems:'center', position:'relative'}}>
+              <span className="material-symbols-outlined">shopping_cart</span>
+              {totalItems() > 0 && <span id="cartBadge" style={{position:'absolute', top:-6, right:-6, background:'#e74c3c', color:'#fff', borderRadius:10, padding:'2px 6px', fontSize:12}}>{totalItems()}</span>}
+            </Link>
+          )}
 
           {user ? (
             <div style={{position:'relative'}} ref={dropdownRef}>

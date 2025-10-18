@@ -32,7 +32,7 @@ export default function ProductoPage() {
     <div>
       <Header />
 
-      <main>
+  <main className="product-page-main">
   <section className="product-detail-container" style={{ maxWidth: 900, margin: '40px auto 40px', padding: 20 }}>
           <div style={{display:'flex', gap:20, alignItems:'flex-start', flexWrap:'wrap'}}>
             <div style={{flex:1, minWidth:260, maxWidth:380}}>
@@ -45,8 +45,14 @@ export default function ProductoPage() {
               <div style={{display:'flex', gap:10, alignItems:'center', marginTop:10}}>
                 <input id="qtyInput" type="number" min="1" value={qty} onChange={(e)=>setQty(Math.max(1, Number(e.target.value)||1))} style={{width:80, padding:6, borderRadius:6, border:'1px solid #ccc'}} />
                 <button className="products-button" onClick={()=>{
-                  for(let i=0;i<qty;i++) addToCart(nombre, precio, imagen);
-                  alert(`${nombre} añadido al carrito`);
+                  try{
+                    for(let i=0;i<qty;i++) addToCart(nombre, precio, imagen);
+                    alert(`${nombre} añadido al carrito`);
+                  }catch(err){
+                    // when user is not logged in, CartContext.addToCart throws
+                    alert('Se debe iniciar sesion para poder añadir producto');
+                    // do nothing else; remain on the same page
+                  }
                 }}>Añadir al carrito</button>
               </div>
             </div>

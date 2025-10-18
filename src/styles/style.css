@@ -2,9 +2,25 @@ p, label {
 	font-family: "Lato", sans-serif;
 }
 
+/* Ensure the app fills the viewport and allow pushing the footer to the bottom */
+html, body, #root {
+	height: 100%;
+}
+
+/* Ensure the immediate React app container fills the viewport and uses column layout
+   This helps pages that render their own wrapper divs (like ProductoPage) to push
+   the footer to the bottom reliably. */
+#root > div {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
 main {
 	/* reduce the large top padding so pages don't leave excessive white space under the fixed header */
 	padding-top: 60px;
+	/* allow main to grow so footer is pushed to bottom on short pages */
+	flex: 1 0 auto;
 }
 
 body {
@@ -13,6 +29,9 @@ body {
 	color: #5D4037;
 	margin: 0;
 	padding: 0;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
 
 header {
@@ -160,6 +179,22 @@ button {
 	background-color: #5F4B3C; 
 	color: #F5EFE6; 
 	border: none; 
+}
+
+.brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+.brand img{
+	height: 56px;
+	width: 56px;
+	object-fit: contain;
+	border-radius: 6px;
+}
+.brand span{
+	color: #F5EFE6;
+	font-weight: 600;
 }
 
 .dropdown {
@@ -346,7 +381,10 @@ button {
 	background-color: #5F4B3C; 
 	color: #F5EFE6; 
 	border: none;
+	/* push footer to bottom when page content is short */
 	margin-top: 20px;
+	margin-top: auto;
+	width: 100%;
 }
 .footer-left {
 	display: flex;

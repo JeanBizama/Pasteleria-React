@@ -104,7 +104,7 @@ const seedProducts = [
       name: 'Galletas de Avena Veganas',
       description: 'Crujientes y sabrosas, estas galletas son una excelente opción para un snack saludable y vegano.',
       price: 2800,
-      image: 'https://i.pinimg.com/564x/72/48/a3/7248a393f041e2089b02a7c35f66e8c.jpg',
+      image: 'https://luciacomparada.com/wp-content/uploads/2024/01/galletas-de-avena-veganas-07-1024x683.jpg',
       categories: ['veganos']
     },
     {

@@ -9,6 +9,14 @@ main {
 	flex: 1; /* utiliza el espacio disponible y empuja el footer hacia el final*/
 }
 
+/* product page specific: make main behave like a full-height column so footer stays at bottom */
+.product-page-main {
+	display: flex;
+	flex-direction: column;
+	flex: 1 0 auto;
+	justify-content: flex-start; /* allow content to flow naturally */
+}
+
 .nav-body{
 	display: flex;
 	justify-content: center;
