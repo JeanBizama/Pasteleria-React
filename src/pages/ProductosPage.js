@@ -3,7 +3,8 @@ import '../styles/style.css';
 import '../styles/style_productos.css';
 import Header from '../components/Header';
 import { useProducts } from '../context/ProductsContext';
-import { Link } from 'react-router-dom';
+import ProductList from '../components/Product/ProductList';
+import CategoryFilter from '../components/Product/CategoryFilter';
 
 export default function ProductosPage() {
   const { products, setProducts } = useProducts();
@@ -28,28 +29,13 @@ export default function ProductosPage() {
   return (
     <div>
       <Header />
-
-      <nav className="nav-body" id="categoryFilter">
-        {categories.map(cat => (
-          <button key={cat} onClick={()=> setFilter(cat)} data-category={cat} style={{background:'transparent', border:'none', color:'inherit', fontWeight:600, cursor:'pointer'}}>
-            {cat === 'all' ? 'Todos' : cat.replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase())}
-          </button>
-        ))}
-      </nav>
-
+      <CategoryFilter 
+        categories={categories}
+        activeFilter={filter}
+        onFilterChange={setFilter}
+      />
       <main>
-        <section className="products-container" id="productsList">
-          {displayed && displayed.length ? displayed.map(p => (
-            <div className="product-item" key={p.id || p.name} data-category={(p.categories||[]).join(',')}>
-              <h3>{p.name}</h3>
-              <img src={p.image} alt={p.name} style={{maxWidth:'100%'}} />
-              <p>Precio: ${p.price?.toLocaleString?.('es-CL') || p.price}</p>
-              <Link className="products-button" to="/producto" onClick={() => {
-                localStorage.setItem('productoSeleccionado', JSON.stringify(p));
-              }}>Ver Detalle</Link>
-            </div>
-          )) : <p style={{padding:20}}>No hay productos</p>}
-        </section>
+          <ProductList products={displayed} />
       </main>
 
       <footer>
