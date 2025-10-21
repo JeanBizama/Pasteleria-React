@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import '../styles/style.css';
 import '../styles/style_productos.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { useProducts } from '../context/ProductsContext';
 import ProductList from '../components/Product/ProductList';
 import CategoryFilter from '../components/Product/CategoryFilter';
@@ -27,7 +28,7 @@ export default function ProductosPage() {
   }, [products, filter]);
 
   return (
-    <div>
+    <div className="productos-page">
       <Header />
       <CategoryFilter 
         categories={categories}
@@ -38,19 +39,7 @@ export default function ProductosPage() {
           <ProductList products={displayed} />
       </main>
 
-      <footer>
-        <div className="nav-links">
-          <div className="left-footer">
-            <p>Pasteleria Mil Sabores</p>
-          </div>
-          <div className="middle-footer">
-            <p>© 2025 - Todos los derechos reservados</p>
-          </div>
-          <div className="right-footer">
-            <p>Contacto: info@milSabores.cl</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

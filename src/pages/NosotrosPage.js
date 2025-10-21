@@ -1,10 +1,11 @@
 import React from 'react';
 import '../styles/style.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function NosotrosPage() {
   return (
-    <div>
+    <div className="nosotros-page">
       <Header />
 
       <main className="nosotros-main-content">
@@ -34,19 +35,7 @@ export default function NosotrosPage() {
         </div>
       </main>
 
-      <footer>
-        <div className="nav-links">
-          <div className="left-footer">
-            <p>Pasteleria Mil Sabores</p>  
-          </div>
-          <div className="middle-footer">
-            <p>© 2025 - Todos los derechos reservados</p>
-          </div>
-          <div className="right-footer">
-            <p>Contacto: info@milSabores.cl</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import React from 'react';
+import { Container, Row, Col, Card, Form } from 'react-bootstrap';
 import '../styles/style.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Button from '../components/UI/Button';
 
 export default function ContactoPage() {
   return (
@@ -8,39 +11,47 @@ export default function ContactoPage() {
       <Header />
 
       <main className="contact-main-content">
-        <div className="contact-form-container">
-          <h2>CONTÁCTANOS</h2>
-          <form onSubmit={(e) => { e.preventDefault(); alert('Su solicitud de contacto ha sido enviada exitosamente'); }}>
-            <label htmlFor="name">NOMBRE</label>
-            <input type="text" id="name" name="name" required />
+        <Container>
+          <Row className="justify-content-center py-5">
+            <Col xs={12} md={10} lg={8}>
+              <Card className="shadow-sm contact-form-container">
+                <Card.Body className="p-4">
+                  <h2 className="text-center mb-4" style={{fontFamily: 'Pacifico, cursive', color: '#5D4037'}}>
+                    CONTÁCTANOS
+                  </h2>
+                  <Form onSubmit={(e) => { e.preventDefault(); alert('Su solicitud de contacto ha sido enviada exitosamente'); }}>
+                    <Form.Group className="mb-3" controlId="name">
+                      <Form.Label>NOMBRE</Form.Label>
+                      <Form.Control type="text" name="name" required />
+                    </Form.Group>
 
-            <label htmlFor="email">CORREO</label>
-            <input type="email" id="email" name="email" required />
+                    <Form.Group className="mb-3" controlId="email">
+                      <Form.Label>CORREO</Form.Label>
+                      <Form.Control type="email" name="email" required />
+                    </Form.Group>
 
-            <label htmlFor="subject">ASUNTO</label>
-            <input type="text" id="SUBJECT" name="SUBJECT" required />
+                    <Form.Group className="mb-3" controlId="subject">
+                      <Form.Label>ASUNTO</Form.Label>
+                      <Form.Control type="text" name="subject" required />
+                    </Form.Group>
 
-            <label htmlFor="message">MENSAJE</label>
-            <textarea id="message" rows={5} required></textarea>
+                    <Form.Group className="mb-3" controlId="message">
+                      <Form.Label>MENSAJE</Form.Label>
+                      <Form.Control as="textarea" rows={5} required />
+                    </Form.Group>
 
-            <button type="submit" className="contact-button">ENVIAR</button>
-          </form>
-        </div>
+                    <Button type="submit" className="w-100">
+                      ENVIAR
+                    </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </main>
 
-      <footer>
-        <div className="nav-links">
-          <div className="left-footer">
-            <p>Pasteleria Mil Sabores</p>  
-          </div>
-          <div className="middle-footer">
-            <p>© 2025 - Todos los derechos reservados</p>
-          </div>
-          <div className="right-footer">
-            <p>Contacto: info@milSabores.cl</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

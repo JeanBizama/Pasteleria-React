@@ -8,6 +8,17 @@ export default function PerfilPage(){
   const { user, updateProfile } = useAuth();
   const [form, setForm] = useState({ username:'', email:'', fechaNacimiento:'', cupon:'', beneficio:'' });
 
+  function formatDateDisplay(value){
+    if(!value) return '';
+    // yyyy-mm-dd -> dd-mm-yyyy
+    if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
+      const [y,m,d] = value.split('-');
+      return `${d}-${m}-${y}`;
+    }
+    // already dd-mm-yyyy or any other readable format
+    return value;
+  }
+
   useEffect(()=>{
     if (user) setForm({ username: user.username, email: user.email, fechaNacimiento: user.fechaNacimiento, cupon: user.cupon || '', beneficio: user.beneficio || '' });
   }, [user]);
@@ -42,7 +53,12 @@ export default function PerfilPage(){
             <label htmlFor="emailPerfil">Correo electronico</label>
             <input type="email" value={form.email} onChange={e=>setForm({...form, email:e.target.value})} required />
             <label htmlFor="fechaNacimientoPerfil">Fecha de nacimiento</label>
-            <input type="date" value={form.fechaNacimiento || ''} onChange={e=>setForm({...form, fechaNacimiento:e.target.value})} />
+            <input
+              type="text"
+              value={formatDateDisplay(form.fechaNacimiento)}
+              placeholder="dd-mm-aaaa"
+              readOnly
+            />
             <label htmlFor="cuponPerfil">Cupon de descuento</label>
             <input type="text" value={form.cupon} onChange={e=>setForm({...form, cupon:e.target.value})} />
             <button className="login-button" type="submit">Guardar cambios</button>

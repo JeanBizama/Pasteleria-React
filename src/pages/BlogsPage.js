@@ -2,10 +2,11 @@ import React from 'react';
 import '../styles/style.css';
 import '../styles/style_blogs.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function BlogsPage() {
   return (
-    <div>
+    <div className="blogs-page">
       <Header />
 
       <main className="blogs-main-content">
@@ -43,19 +44,7 @@ export default function BlogsPage() {
         </div>
       </main>
 
-      <footer>
-        <div className="nav-links">
-          <div className="left-footer">
-            <p>Pastelería Mil Sabores</p>  
-          </div>
-          <div className="middle-footer">
-            <p>&copy; 2025 - Todos los derechos reservados</p>
-          </div>
-          <div className="right-footer">
-            <p><a href="mailto:info@milSabores.cl">Contacto: info@milSabores.cl</a></p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

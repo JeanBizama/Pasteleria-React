@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import '../styles/style.css';
 import '../styles/style_productos.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
+import ProductImage from '../components/Product/ProductImage';
+import QuantityInput from '../components/Cart/QuantityInput';
+import Button from '../components/UI/Button';
+import PriceDisplay from '../components/UI/PriceDisplay';
 import { useCart } from '../context/CartContext';
 
 export default function ProductoPage() {
@@ -19,7 +26,15 @@ export default function ProductoPage() {
   if (!product) return (
     <div>
       <Header />
-      <main><div style={{maxWidth:900, margin:'40px auto', padding:20}}>Producto no encontrado. Vuelve a <a href="/productos">Productos</a>.</div></main>
+      <main>
+        <Container className="text-center py-5">
+          <Card className="p-4">
+            <Card.Body>
+              Producto no encontrado. Vuelve a <Link to="/productos">Productos</Link>.
+            </Card.Body>
+          </Card>
+        </Container>
+      </main>
     </div>
   );
 
@@ -32,47 +47,53 @@ export default function ProductoPage() {
     <div>
       <Header />
 
-  <main className="product-page-main">
-  <section className="product-detail-container" style={{ maxWidth: 900, margin: '40px auto 40px', padding: 20 }}>
-          <div style={{display:'flex', gap:20, alignItems:'flex-start', flexWrap:'wrap'}}>
-            <div style={{flex:1, minWidth:260, maxWidth:380}}>
-              <img src={imagen} alt={nombre} style={{width:'100%', borderRadius:12, objectFit:'cover'}} />
-            </div>
-            <div style={{flex:1, minWidth:260}}>
-              <h2 style={{marginTop:0}}>{nombre}</h2>
-              <p id="productDescription">{descripcion}</p>
-              <p><strong>Precio:</strong> ${precio.toLocaleString('es-CL')}</p>
-              <div style={{display:'flex', gap:10, alignItems:'center', marginTop:10}}>
-                <input id="qtyInput" type="number" min="1" value={qty} onChange={(e)=>setQty(Math.max(1, Number(e.target.value)||1))} style={{width:80, padding:6, borderRadius:6, border:'1px solid #ccc'}} />
-                <button className="products-button" onClick={()=>{
-                  try{
-                    for(let i=0;i<qty;i++) addToCart(nombre, precio, imagen);
-                    alert(`${nombre} añadido al carrito`);
-                  }catch(err){
-                    // when user is not logged in, CartContext.addToCart throws
-                    alert('Se debe iniciar sesion para poder añadir producto');
-                    // do nothing else; remain on the same page
-                  }
-                }}>Añadir al carrito</button>
-              </div>
-            </div>
-          </div>
-        </section>
+      <main className="product-page-main">
+        <Container className="py-5">
+          <Card className="shadow-sm product-detail-container">
+            <Card.Body>
+              <Row className="align-items-start">
+                <Col xs={12} md={5} lg={4} className="mb-4 mb-md-0">
+                  <ProductImage 
+                    src={imagen} 
+                    alt={nombre} 
+                    style={{width:'100%', borderRadius:12, objectFit:'cover', maxHeight: 400}} 
+                  />
+                </Col>
+                <Col xs={12} md={7} lg={8}>
+                  <h2 style={{marginTop:0, fontFamily: 'Pacifico, cursive', color: '#5D4037'}}>{nombre}</h2>
+                  <p id="productDescription" className="mb-3">{descripcion}</p>
+                  <p className="mb-3"><strong>Precio:</strong> <PriceDisplay price={precio} /></p>
+                  <Row className="align-items-center g-2">
+                    <Col xs={4} sm={3} md={4} lg={2}>
+                      <QuantityInput 
+                        value={qty} 
+                        onChange={setQty} 
+                      />
+                    </Col>
+                    <Col xs={8} sm={9} md={8} lg={6}>
+                      <Button 
+                        className="w-100"
+                        onClick={()=>{
+                          try{
+                            for(let i=0;i<qty;i++) addToCart(nombre, precio, imagen);
+                            alert(`${nombre} añadido al carrito`);
+                          }catch(err){
+                            alert('Se debe iniciar sesion para poder añadir producto');
+                          }
+                        }}
+                      >
+                        Añadir al carrito
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Container>
       </main>
 
-      <footer>
-        <div className="nav-links">
-          <div className="left-footer">
-            <p>Pastaleria Mil Sabores</p>
-          </div>
-          <div className="middle-footer">
-            <p>© 2025 - Todos los derechos reservados</p>
-          </div>
-          <div className="right-footer">
-            <p>Contacto: info@milSabores.cl</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

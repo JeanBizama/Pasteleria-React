@@ -1,6 +1,10 @@
 import React from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import '../styles/style.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Button from '../components/UI/Button';
 
 export default function IndexPage() {
   return (
@@ -8,31 +12,45 @@ export default function IndexPage() {
       <Header />
 
       <main className="home-main-content">
-        <section className="hero">
-          <div className="hero-text">
-            <h1>🍰 50 Años Endulzando Momentos</h1>
-            <p>
-              Pastelería <b>1000 Sabores</b> celebra su aniversario como un referente en la repostería chilena.  
-              Famosa por su récord Guinness en 1995, buscamos renovar nuestra tienda online para entregarte  
-              una <b>experiencia de compra moderna, fácil y deliciosa</b>.
-            </p>
+  <Container fluid className="hero py-5 mb-4">
+          <Row className="align-items-center">
+            <Col xs={12} lg={6} className="mb-4 mb-lg-0">
+              <div className="hero-text px-3 px-md-4">
+                <h1 style={{fontFamily: 'Pacifico, cursive', fontSize: 'clamp(1.5rem, 5vw, 2.5rem)'}}>
+                  🍰 50 Años Endulzando Momentos
+                </h1>
+                <p className="lead">
+                  Pastelería <b>1000 Sabores</b> celebra su aniversario como un referente en la repostería chilena.  
+                  Famosa por su récord Guinness en 1995, buscamos renovar nuestra tienda online para entregarte  
+                  una <b>experiencia de compra moderna, fácil y deliciosa</b>.
+                </p>
 
-            <ul className="benefits">
-              <li>✔️ Envíos a todo Chile</li>
-              <li>✔️ Productos frescos y artesanales</li>
-              <li>✔️ Compra rápida y segura</li>
-            </ul>
+                <ul className="benefits list-unstyled">
+                  <li className="mb-2">✔️ Envíos a todo Chile</li>
+                  <li className="mb-2">✔️ Productos frescos y artesanales</li>
+                  <li className="mb-2">✔️ Compra rápida y segura</li>
+                </ul>
 
-            <a href="/productos" className="cta">Ver productos</a>
-          </div>
+                <Button as={Link} to="/productos" size="lg" className="mt-3">
+                  Ver productos
+                </Button>
+              </div>
+            </Col>
 
-          <div className="hero-img">
-            <img src="https://antojosalpaladar.com.ve/wp-content/uploads/2024/11/Que-es-la-pasteleria.webp" alt="Pasteleria" width="1000" />
-          </div>
-        </section>
+            <Col xs={12} lg={6}>
+              <div className="hero-img">
+                <img 
+                  src="https://antojosalpaladar.com.ve/wp-content/uploads/2024/11/Que-es-la-pasteleria.webp" 
+                  alt="Pasteleria" 
+                  className="img-fluid rounded shadow"
+                />
+              </div>
+            </Col>
+          </Row>
+        </Container>
 
         <section className="products-grid-section">
-          <h2>Productos</h2>
+          <h2 className="text-center" style={{marginTop: '2rem'}}>Productos</h2>
           <div className="products-container">
             <div className="product-item">
               <img src="https://glutendence.com/wp-content/uploads/2023/10/barritas-de-pan-sin-gluten.jpg" alt="Pan sin gluten" />
@@ -102,19 +120,7 @@ export default function IndexPage() {
         </section>
       </main>
 
-      <footer>
-        <div className="nav-links">
-          <div className="left-footer">
-            <p>Pasteleria Mil Sabores</p>  
-          </div>
-          <div className="middle-footer">
-            <p>© 2025 - Todos los derechos reservados</p>
-          </div>
-          <div className="right-footer">
-            <p>Contacto: info@milSabores.cl</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

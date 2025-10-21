@@ -1,21 +1,22 @@
 import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 
 const ProductList = ({ products }) => {
   if (!products || products.length === 0) {
-    return <div className="no-products">No hay productos disponibles</div>;
+    return <div className="no-products text-center p-4">No hay productos disponibles</div>;
   }
 
   return (
-    <section className="products-container container" id="productsList">
-      <div className="row">
+    <Container fluid className="products-container" id="productsList">
+      <Row className="g-4 justify-content-center">
         {products.map(product => (
-          <div className="col-12 col-sm-6 col-md-4 mb-4" key={product.id || product.name}>
+          <Col xs={12} sm={6} md={4} lg={3} key={product.id || product.name} className="d-flex">
             <ProductCard product={product} />
-          </div>
+          </Col>
         ))}
-      </div>
-    </section>
+      </Row>
+    </Container>
   );
 };
 

@@ -17,19 +17,20 @@ main {
 	justify-content: flex-start; /* allow content to flow naturally */
 }
 
-.nav-body{
+#categoryFilter.nav-body{
 	display: flex;
 	justify-content: center;
-	gap: 20px;
-	padding: 10px;
+	gap: 16px; /* slightly tighter spacing */
+	padding: 4px 12px; /* thinner bar height */
 	background-color: #947259; 
 	color: #F5EFE6
 }
 
 /* separate category filter from fixed header so it doesn't visually merge */
-.nav-body#categoryFilter {
-	margin-top: 24px; /* push the category bar down a bit more */
-	padding-top: 6px;
+/* Place the category bar immediately below the fixed header */
+#categoryFilter.nav-body {
+	margin-top: 0; /* sit flush under the header */
+	padding-top: 2px; /* minimal breathing room */
 }
 
 .nav-body a{
@@ -55,9 +56,13 @@ header {
 	height: 100px;
 }
 
-body {
-	/* reduce top padding to match main global value */
-	padding-top: 60px;
+/* Ensure page content starts below the fixed header (header ~100px) */
+/* Scope spacing to the Productos page only */
+.productos-page {
+	padding-top: 64px; /* push content below fixed header */
+}
+.productos-page main {
+	padding-top: 0 !important; /* avoid double spacing only on this page */
 }
 
 .product-detail-container {
@@ -68,10 +73,12 @@ body {
 }
 
 /* product grid card spacing: give cards a bit more bottom padding so the category bar sits closely above */
-.products-container {
+/* Override legacy grid styles only on Productos page: let RB Row/Col handle layout */
+.productos-page .products-container {
 	margin-top: 12px; /* bring the products grid a bit closer to the filter bar */
+	display: block; /* override display: grid from the legacy stylesheet */
 }
-.products-container .product-item {
+.productos-page .products-container .product-item {
 	padding: 18px 16px 28px; /* more bottom padding so the button has breathing room */
 }
 
@@ -81,7 +88,7 @@ body {
 	gap: 20px;
 }
 
-.product-image {
+#productDetail .product-image {
 	max-width: 300px;
 	height: auto;
 	border-radius: 5px;

@@ -524,3 +524,63 @@ button {
 	line-height: 1.7;
 	margin-bottom: 25px;
 }
+
+/* Imagen de nosotros: que sea siempre responsive */
+.about-section img {
+	width: 100%;
+	height: auto;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Misión y Visión en tarjetas con grid responsivo */
+.mission-vision-section {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+	margin-top: 10px;
+}
+.mission-vision-section .mission-card,
+.mission-vision-section .vision-card {
+	background: #fff7eb;
+	border-radius: 12px;
+	padding: 24px;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.mission-vision-section h2 {
+	margin-top: 0;
+	margin-bottom: 12px;
+}
+
+/* Ajustes móviles para Nosotros */
+@media (max-width: 768px) {
+	.nosotros-main-content {
+		/* dar espacio suficiente bajo el header fijo */
+		padding: 84px 16px 24px; /* top right/left bottom */
+	}
+	.nosotros-container {
+		margin: 16px auto;
+		padding: 16px;
+		border-radius: 10px;
+	}
+	.about-section p {
+		font-size: 1rem;
+		line-height: 1.6;
+		margin-bottom: 16px;
+		text-align: left;
+	}
+	.about-section h1 {
+		font-size: 1.8rem;
+		text-align: center;
+		margin-top: 8px; /* un poco de aire extra bajo el header */
+	}
+	.mission-vision-section {
+		grid-template-columns: 1fr;
+		gap: 16px;
+		margin-top: 6px;
+	}
+	.mission-vision-section .mission-card,
+	.mission-vision-section .vision-card {
+		padding: 16px;
+	}
+}

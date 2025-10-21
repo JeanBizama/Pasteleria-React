@@ -7,8 +7,11 @@ const ProductImage = ({ src, alt, className = '', ...props }) => {
       alt={alt}
       className={`product-image img-fluid ${className}`}
       style={{
-        maxWidth: '100%',
+        display: 'block',
+        width: '100%',
+        height: '100%',
         objectFit: 'cover',
+        objectPosition: 'center',
         borderRadius: '8px',
         ...props.style
       }}

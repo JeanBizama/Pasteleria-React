@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
 const QuantityInput = ({ value, onChange, min = 1 }) => {
   const handleChange = (e) => {
@@ -7,17 +8,16 @@ const QuantityInput = ({ value, onChange, min = 1 }) => {
   };
 
   return (
-    <input
+    <Form.Control
       type="number"
       min={min}
       value={value}
       onChange={handleChange}
       style={{
         width: 70,
-        padding: '4px 8px',
-        borderRadius: 4,
-        border: '1px solid #ccc'
+        padding: '4px 8px'
       }}
+      size="sm"
     />
   );
 };

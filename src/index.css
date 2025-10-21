@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Estilos para enlaces del navbar */
+.nav-link-custom {
+  color: #fff !important;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link-custom:hover {
+  color: #E9897E !important;
+}
+
+/* Estilos para navbar brand y user links */
+header .navbar-brand,
+header .nav-link,
+header .dropdown-toggle {
+  color: #fff !important;
+}
+
+header .nav-link:hover,
+header .dropdown-toggle:hover {
+  color: #E9897E !important;
+}
+
+/* Estilos para footer */
+footer p {
+  color: #fff;
+  margin-bottom: 0;
+}
