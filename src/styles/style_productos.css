@@ -9,28 +9,19 @@ main {
 	flex: 1; /* utiliza el espacio disponible y empuja el footer hacia el final*/
 }
 
-/* product page specific: make main behave like a full-height column so footer stays at bottom */
-.product-page-main {
-	display: flex;
-	flex-direction: column;
-	flex: 1 0 auto;
-	justify-content: flex-start; /* allow content to flow naturally */
-}
-
-#categoryFilter.nav-body{
+.nav-body{
 	display: flex;
 	justify-content: center;
-	gap: 16px; /* slightly tighter spacing */
-	padding: 4px 12px; /* thinner bar height */
+	gap: 20px;
+	padding: 10px;
 	background-color: #947259; 
 	color: #F5EFE6
 }
 
 /* separate category filter from fixed header so it doesn't visually merge */
-/* Place the category bar immediately below the fixed header */
-#categoryFilter.nav-body {
-	margin-top: 0; /* sit flush under the header */
-	padding-top: 2px; /* minimal breathing room */
+.nav-body#categoryFilter {
+	margin-top: 24px; /* push the category bar down a bit more */
+	padding-top: 6px;
 }
 
 .nav-body a{
@@ -56,13 +47,9 @@ header {
 	height: 100px;
 }
 
-/* Ensure page content starts below the fixed header (header ~100px) */
-/* Scope spacing to the Productos page only */
-.productos-page {
-	padding-top: 64px; /* push content below fixed header */
-}
-.productos-page main {
-	padding-top: 0 !important; /* avoid double spacing only on this page */
+body {
+	/* reduce top padding to match main global value */
+	padding-top: 60px;
 }
 
 .product-detail-container {
@@ -73,12 +60,10 @@ header {
 }
 
 /* product grid card spacing: give cards a bit more bottom padding so the category bar sits closely above */
-/* Override legacy grid styles only on Productos page: let RB Row/Col handle layout */
-.productos-page .products-container {
+.products-container {
 	margin-top: 12px; /* bring the products grid a bit closer to the filter bar */
-	display: block; /* override display: grid from the legacy stylesheet */
 }
-.productos-page .products-container .product-item {
+.products-container .product-item {
 	padding: 18px 16px 28px; /* more bottom padding so the button has breathing room */
 }
 
@@ -88,7 +73,7 @@ header {
 	gap: 20px;
 }
 
-#productDetail .product-image {
+.product-image {
 	max-width: 300px;
 	height: auto;
 	border-radius: 5px;
