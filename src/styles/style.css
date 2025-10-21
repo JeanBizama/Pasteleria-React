@@ -85,6 +85,16 @@ button {
 .nav-links a:hover {
 		color: #FFC0CB
 }
+/* Unificar color de hover en todo el header (incluye enlaces móviles y desktop) */
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+	color: #FFC0CB !important;
+}
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+	color: #E9897E !important;
+	background-color: rgba(233,137,126,0.12);
+}
 .nav-body{
 	display: flex;
 	justify-content: space-between;
@@ -325,11 +335,28 @@ button {
 	background-color: #d1756a; 
 }
 
-.products-container {
+.products-grid-section .products-container {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 20px;
 	padding: 20px;    
+}
+
+/* Responsive columns for home products grid to avoid horizontal overflow */
+@media (max-width: 1200px) {
+	.products-grid-section .products-container {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+@media (max-width: 768px) {
+	.products-grid-section .products-container {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 480px) {
+	.products-grid-section .products-container {
+		grid-template-columns: 1fr;
+	}
 }
 
 .products-grid-section h2 {

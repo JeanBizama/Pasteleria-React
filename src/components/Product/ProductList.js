@@ -9,9 +9,9 @@ const ProductList = ({ products }) => {
 
   return (
     <Container fluid className="products-container" id="productsList">
-      <Row className="g-4 justify-content-center">
+      <Row className="g-3 g-sm-4 justify-content-center">
         {products.map(product => (
-          <Col xs={12} sm={6} md={4} lg={3} key={product.id || product.name} className="d-flex">
+          <Col xs={6} sm={6} md={4} lg={3} key={product.id || product.name} className="d-flex">
             <ProductCard product={product} />
           </Col>
         ))}
