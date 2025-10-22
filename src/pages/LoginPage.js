@@ -30,7 +30,7 @@ export default function LoginPage(){
         <Container>
           <Row className="justify-content-center py-5">
             <Col xs={12} sm={10} md={8} lg={6} xl={5}>
-              <Card className="shadow-sm">
+              <Card className="app-surface">
                 <Card.Body className="p-4">
                   <h1 className="text-center mb-4" style={{fontFamily: 'Pacifico, cursive'}}>Iniciar sesión</h1>
                   <Form onSubmit={onSubmit} id="FormularioInicio">
@@ -58,7 +58,7 @@ export default function LoginPage(){
                       Iniciar sesión
                     </Button>
 
-                    <div className="text-center">
+                    <div className="text-center auth-links">
                       <p className="mb-2">
                         ¿Olvidaste tu contraseña? <Link to="/recuperar">Recupérala aquí</Link>
                       </p>

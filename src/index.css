@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-/* Estilos para enlaces del navbar */
 .nav-link-custom {
   color: #fff !important;
   transition: color 0.3s ease;
@@ -23,7 +22,6 @@ code {
   color: #E9897E !important;
 }
 
-/* Estilos para navbar brand y user links */
 header .navbar-brand,
 header .nav-link,
 header .dropdown-toggle {
@@ -35,7 +33,6 @@ header .dropdown-toggle:hover {
   color: #E9897E !important;
 }
 
-/* Estilos para footer */
 footer p {
   color: #fff;
   margin-bottom: 0;

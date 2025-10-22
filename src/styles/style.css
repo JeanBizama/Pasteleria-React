@@ -1,15 +1,9 @@
 p, label {
 	font-family: "Lato", sans-serif;
 }
-
-/* Ensure the app fills the viewport and allow pushing the footer to the bottom */
 html, body, #root {
 	height: 100%;
 }
-
-/* Ensure the immediate React app container fills the viewport and uses column layout
-   This helps pages that render their own wrapper divs (like ProductoPage) to push
-   the footer to the bottom reliably. */
 #root > div {
 	display: flex;
 	flex-direction: column;
@@ -17,9 +11,7 @@ html, body, #root {
 }
 
 main {
-	/* reduce the large top padding so pages don't leave excessive white space under the fixed header */
 	padding-top: 60px;
-	/* allow main to grow so footer is pushed to bottom on short pages */
 	flex: 1 0 auto;
 }
 
@@ -82,10 +74,10 @@ button {
 	color: #ffffff
 }
 
+
 .nav-links a:hover {
 		color: #FFC0CB
 }
-/* Unificar color de hover en todo el header (incluye enlaces móviles y desktop) */
 .navbar .nav-link:hover,
 .navbar .nav-link:focus {
 	color: #FFC0CB !important;
@@ -102,8 +94,6 @@ button {
 	background-color: #947259; 
 	color: #F5EFE6
 }
-
-/* Header: center the middle nav while keeping left and user sections at edges */
 .nav-links .middle-header {
 	flex: 0;
 	display: flex;
@@ -116,21 +106,18 @@ button {
 	display: flex;
 	align-items: center;
 }
-
-
-/* Contact form container adjustments */
 .contact-main-content {
 	padding-top: 60px;
 }
 .contact-form-container {
 	max-width: 700px;
-	margin: 20px auto 40px; /* extra bottom space so footer doesn't stick to form */
+	margin: 20px auto 40px;
 	padding: 20px;
 	background:#fff7eb;
 	border-radius:12px;
 }
 .nav-links .middle-header nav {
-	white-space: nowrap; /* prevent items wrapping into multiple lines */
+	white-space: nowrap;
 }
 
 .nav-links .middle-header nav a {
@@ -142,20 +129,15 @@ button {
 	align-items: center;
 }
 
-/* Use a thin right border as separator so it stays vertically centered and never breaks line */
 .nav-links .middle-header nav a:not(:last-child) {
 	padding-right: 10px;
 	margin-right: 8px;
 	border-right: 1px solid rgba(255,255,255,0.95);
 }
-
-/* Allow hiding separators on specific links */
 .nav-links a.no-sep::after,
 .nav-body a.no-sep::after {
 	content: none;
 }
-
-/* Category bar: remove separators and space items evenly */
 .nav-body {
 	justify-content: space-around;
 	gap: 8px;
@@ -255,7 +237,7 @@ button {
   gap: 40px;
   padding: 60px 10%;
   background: #fff7eb;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra sutil como en nosotros-container */
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .hero-text {
@@ -311,15 +293,11 @@ button {
   max-width: 100%;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  transition: transform 0.3s ease; /* transición suave */
+  transition: transform 0.3s ease;
 }
 .hero-img img:hover{
-	transform: scale(1.05); /* agranda un 10% */
+	transform: scale(1.05);
 }
-
-/* ------------------------------------ */
-/* P R O D U C T O S */
-/* ------------------------------------ */
 .products-button{
 	padding: 10px 20px;
 	background-color: #E9897E; 
@@ -342,7 +320,6 @@ button {
 	padding: 20px;    
 }
 
-/* Responsive columns for home products grid to avoid horizontal overflow */
 @media (max-width: 1200px) {
 	.products-grid-section .products-container {
 		grid-template-columns: repeat(3, 1fr);
@@ -368,10 +345,8 @@ button {
 	text-align: center;
 	background-color: #fff7eb;
 	border-radius: 10px;
-	box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra sutil como en nosotros-container */
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
-/* remove underline for links inside product cards */
 .product-item a { text-decoration: none; color: inherit; }
 
 .product-item img {
@@ -380,11 +355,11 @@ button {
   object-fit: cover; 
   margin-bottom: 10px; 
   border-radius: 10px;
-  transition: transform 0.3s ease; /* transición suave */
+	transition: transform 0.3s ease;
 }
 
 .product-item img:hover {
-  transform: scale(1.05); /* agranda un 10% */
+	transform: scale(1.05);
 }
 
 .product-info h3 {
@@ -397,9 +372,6 @@ button {
 	font-size: 0.9em;
 	color: #7A695B; 
 }
-/* ------------------------------------ */
-/* F O O T E R */
-/* ------------------------------------ */
 .main-footer{
 	display: flex;
 	justify-content: space-between;
@@ -408,7 +380,6 @@ button {
 	background-color: #5F4B3C; 
 	color: #F5EFE6; 
 	border: none;
-	/* push footer to bottom when page content is short */
 	margin-top: 20px;
 	margin-top: auto;
 	width: 100%;
@@ -448,9 +419,6 @@ button {
 .footer-right button:hover {
 	background-color: #d1756a;
 }
-/* ------------------------------------ */
-/* C O N T A C T O */
-/* ------------------------------------ */
 .contact-main-content {
 	display: flex;
 	justify-content: center;
@@ -515,9 +483,6 @@ button {
 .contact-button:hover {
 	background-color: #d1756a;
 }
-/* ------------------------------------ */
-/* N O S O T R O S */
-/* ------------------------------------ */
 
 .nosotros-main-content {
 	padding: 100px;
@@ -552,15 +517,12 @@ button {
 	margin-bottom: 25px;
 }
 
-/* Imagen de nosotros: que sea siempre responsive */
 .about-section img {
 	width: 100%;
 	height: auto;
 	border-radius: 12px;
 	box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
-
-/* Misión y Visión en tarjetas con grid responsivo */
 .mission-vision-section {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -579,11 +541,9 @@ button {
 	margin-bottom: 12px;
 }
 
-/* Ajustes móviles para Nosotros */
 @media (max-width: 768px) {
 	.nosotros-main-content {
-		/* dar espacio suficiente bajo el header fijo */
-		padding: 84px 16px 24px; /* top right/left bottom */
+		padding: 84px 16px 24px;
 	}
 	.nosotros-container {
 		margin: 16px auto;
@@ -599,7 +559,7 @@ button {
 	.about-section h1 {
 		font-size: 1.8rem;
 		text-align: center;
-		margin-top: 8px; /* un poco de aire extra bajo el header */
+		margin-top: 8px;
 	}
 	.mission-vision-section {
 		grid-template-columns: 1fr;

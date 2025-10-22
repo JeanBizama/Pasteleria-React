@@ -1,10 +1,37 @@
+const fs = require('fs');
+
 module.exports = function(config) {
+  // Ensure CHROME_BIN points to a Chromium browser. If Google Chrome is not installed,
+  // try to use Microsoft Edge (Chromium) binary so we can still run ChromeHeadless.
+  if (!process.env.CHROME_BIN) {
+    const candidates = [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+      'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    ];
+
+    for (const p of candidates) {
+      try {
+        if (fs.existsSync(p)) {
+          process.env.CHROME_BIN = p;
+          break;
+        }
+      } catch (_) {}
+    }
+  }
+
+  const selectedBrowsers = ['ChromeHeadlessNoSandbox'];
+
   config.set({
     frameworks: ['jasmine'],
     files: [
+      // setup de matchers jasmine-dom (antes de los tests)
+      'src/tests/setupJasmine.js',
       'src/**/*.test.{js,jsx}'
     ],
     preprocessors: {
+      'src/tests/setupJasmine.js': ['webpack'],
       'src/**/*.test.{js,jsx}': ['webpack']
     },
     webpack: {
@@ -48,7 +75,7 @@ module.exports = function(config) {
         ]
       }
     },
-    browsers: ['ChromeHeadlessNoSandbox'],
+    browsers: selectedBrowsers,
 
     // aumentar timeouts/tolerancias para evitar desconexiones por carga lenta
     browserNoActivityTimeout: 120000,    // ms to wait without any activity

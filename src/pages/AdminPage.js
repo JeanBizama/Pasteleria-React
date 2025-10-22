@@ -109,7 +109,6 @@ export default function AdminPage(){
                       ) : (
                         <>
                           <button onClick={()=>startEditUser(i)}>Editar</button>
-                          {/* eslint-disable-next-line no-alert */}
                           <button onClick={()=>{ if(window.confirm('Eliminar usuario?')) deleteUserByIndex(i); }}>Eliminar</button>
                         </>
                       )}
@@ -169,7 +168,6 @@ export default function AdminPage(){
                       ) : (
                         <>
                           <button onClick={()=>startEditProduct(i)}>Editar</button>
-                          {/* eslint-disable-next-line no-alert */}
                           <button onClick={()=>{ if(window.confirm('Eliminar producto?')) removeProduct(i); }}>Eliminar</button>
                         </>
                       )}

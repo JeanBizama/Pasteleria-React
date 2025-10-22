@@ -1,3 +1,4 @@
+/* eslint-env jasmine */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ProductImage from '../../../components/Product/ProductImage.js';

@@ -28,7 +28,6 @@ export default function Header(){
           />
           <span>Mil Sabores</span>
         </Navbar.Brand>
-        {/* Cart icon next to burger on mobile only when logged in */}
         {user && (
           <div className="d-lg-none ms-auto me-2 position-relative">
             <Nav.Link as={Link} to="/carrito" className="p-0" style={{color: '#fff'}}>
@@ -57,7 +56,6 @@ export default function Header(){
             <Nav.Link as={Link} to="/blogs" style={{color: '#fff'}} className="nav-link-custom">Blogs</Nav.Link>
             <Nav.Link as={Link} to="/contacto" style={{color: '#fff'}} className="nav-link-custom">Contacto</Nav.Link>
 
-            {/* Mobile-only extra links (no dropdown) */}
             {user ? (
               user.rol === 'admin' ? (
                 <>
@@ -79,7 +77,6 @@ export default function Header(){
           </Nav>
           
           <Nav className="ms-auto align-items-lg-center">
-            {/* Cart on desktop only (mobile cart is next to burger) */}
             {user && (
               <Nav.Link as={Link} to="/carrito" className="position-relative me-3 d-none d-lg-inline-block" style={{color: '#fff'}}>
                 <span className="material-symbols-outlined">shopping_cart</span>
@@ -96,7 +93,6 @@ export default function Header(){
               </Nav.Link>
             )}
 
-            {/* Desktop: keep dropdown */}
             {user ? (
               <>
                 <NavDropdown

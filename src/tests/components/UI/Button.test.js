@@ -1,10 +1,12 @@
+/* eslint-env jasmine */
+/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Button from '../../../components/UI/Button.js';
 
 describe('Button (UI)', () => {
   it('renderiza children y responde al click (accesible por role)', () => {
-    const onClick = jest.fn();
+    const onClick = jasmine.createSpy('onClick');
     render(<Button onClick={onClick}>Enviar</Button>);
     const btn = screen.getByRole('button', { name: /Enviar/i });
     expect(btn).toBeInTheDocument();
@@ -13,7 +15,7 @@ describe('Button (UI)', () => {
   });
 
   it('no llama onClick cuando está disabled y tiene atributo disabled', () => {
-    const onClick = jest.fn();
+    const onClick = jasmine.createSpy('onClick');
     render(<Button onClick={onClick} disabled>Enviar</Button>);
     const btn = screen.getByRole('button', { name: /Enviar/i });
     expect(btn).toBeInTheDocument();

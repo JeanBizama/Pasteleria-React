@@ -1,3 +1,5 @@
+/* eslint-env jasmine */
+/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -20,22 +22,22 @@ describe('ProductCard', () => {
     );
 
     const heading = screen.getByRole('heading', { level: 3, name: /Torta Prueba/i });
-    expect(heading).toBeInTheDocument();
+  expect(heading).toBeInTheDocument();
 
     const img = screen.getByAltText(/Torta Prueba/i);
-    expect(img).toBeInTheDocument();
+  expect(img).toBeInTheDocument();
     expect(img.getAttribute('src')).toBe(product.image);
 
     const link = screen.getByRole('link', { name: /Ver Detalle/i });
-    expect(link).toBeInTheDocument();
+  expect(link).toBeInTheDocument();
 
   const root = screen.getByTestId('product-card');
   expect(root).toBeInTheDocument();
-  expect(root).toHaveAttribute('data-category', product.categories.join(','));
+  expect(root.getAttribute('data-category')).toBe(product.categories.join(','));
   });
 
   it('guarda el producto en localStorage al clicar "Ver Detalle"', () => {
-    const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
+    const setItemSpy = spyOn(Storage.prototype, 'setItem');
 
     render(
       <MemoryRouter>

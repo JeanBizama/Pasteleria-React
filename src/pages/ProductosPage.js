@@ -17,8 +17,7 @@ export default function ProductosPage() {
     if (stored) {
       try { setProducts(JSON.parse(stored)); } catch(e){}
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setProducts]);
 
   const categories = useMemo(() => ['tortas-cuadradas','tortas-circulares','postres-individuales','sin-azúcar','pasteleria-tradicional','sin-gluten','veganos','especiales','all'], []);
 

@@ -10,12 +10,10 @@ export default function PerfilPage(){
 
   function formatDateDisplay(value){
     if(!value) return '';
-    // yyyy-mm-dd -> dd-mm-yyyy
     if(/^\d{4}-\d{2}-\d{2}$/.test(value)){
       const [y,m,d] = value.split('-');
       return `${d}-${m}-${y}`;
     }
-    // already dd-mm-yyyy or any other readable format
     return value;
   }
 

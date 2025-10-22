@@ -1,3 +1,5 @@
+/* eslint-env jasmine */
+/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CategoryFilter from '../../../components/Product/CategoryFilter.js';
@@ -21,7 +23,7 @@ function TestApp({ onFilterChange, active = 'all' }) {
 
 describe('CategoryFilter (integration con ProductsProvider)', () => {
   it('renderiza botones y llama onFilterChange al click', () => {
-    const onFilterChange = jest.fn();
+    const onFilterChange = jasmine.createSpy('onFilterChange');
 
     render(
       <ProductsProvider>
@@ -31,7 +33,7 @@ describe('CategoryFilter (integration con ProductsProvider)', () => {
 
   const expectedCount = Number(screen.getByTestId('expected-count').textContent);
   const buttons = screen.getAllByRole('button').filter(el => el.hasAttribute('data-category'));
-    expect(buttons.length).toBe(expectedCount);
+  expect(buttons.length).toBe(expectedCount);
 
     const btnToClick = buttons.find(b => b.getAttribute('data-category') !== 'all') || buttons[0];
     fireEvent.click(btnToClick);

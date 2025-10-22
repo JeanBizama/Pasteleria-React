@@ -1,3 +1,5 @@
+/* eslint-env jasmine */
+/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -16,7 +18,7 @@ describe('ProductList (integrado con ProductsProvider)', () => {
   });
 
   it('renderiza productos del seed y guarda producto seleccionado en localStorage', async () => {
-    const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
+    const setItemSpy = spyOn(Storage.prototype, 'setItem');
 
     render(
       <ProductsProvider>
@@ -40,9 +42,9 @@ describe('ProductList (integrado con ProductsProvider)', () => {
   fireEvent.click(link);
 
     expect(setItemSpy).toHaveBeenCalled();
-    const lastCall = setItemSpy.mock.calls.at(-1);
-    expect(lastCall[0]).toBe('productoSeleccionado');
-    const saved = JSON.parse(lastCall[1]);
+    const last = setItemSpy.calls.mostRecent().args;
+    expect(last[0]).toBe('productoSeleccionado');
+    const saved = JSON.parse(last[1]);
     expect(saved.name).toBe('Torta de Chocolate');
   });
 });

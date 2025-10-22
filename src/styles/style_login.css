@@ -1,10 +1,9 @@
-/* Estilos básicos para la página de login */
 .login-main-content {
   display:flex;
   justify-content:center;
   align-items:center;
   min-height: calc(100vh - 120px);
-  padding-top: 84px; /* despega del header fijo */
+  padding-top: 84px;
   background: transparent;
 }
 

@@ -1,3 +1,5 @@
+/* eslint-env jasmine */
+/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import QuantityInput from '../../../components/Cart/QuantityInput.js';
@@ -11,7 +13,7 @@ describe('QuantityInput', () => {
   });
 
   it('llama onChange con el número parseado cuando el valor es válido', () => {
-    const onChange = jest.fn();
+    const onChange = jasmine.createSpy('onChange');
     render(<QuantityInput value={2} onChange={onChange} />);
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '5' } });
@@ -19,17 +21,17 @@ describe('QuantityInput', () => {
   });
 
   it('aplica el mínimo (min) cuando se introduce 0, vacío o valor no numérico', () => {
-    const onChange = jest.fn();
+  const onChange = jasmine.createSpy('onChange');
     render(<QuantityInput value={2} onChange={onChange} min={2} />);
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '0' } });
     fireEvent.change(input, { target: { value: '' } });
     fireEvent.change(input, { target: { value: 'abc' } });
 
-    const lastCallArg = onChange.mock.calls.at(-1)[0];
+    const lastCallArg = onChange.calls.mostRecent().args[0];
     expect(lastCallArg).toBe(2);
 
-    const calledWithMin = onChange.mock.calls.some(args => args[0] === 2);
+    const calledWithMin = onChange.calls.allArgs().some(args => args[0] === 2);
     expect(calledWithMin).toBe(true);
   });
 });
