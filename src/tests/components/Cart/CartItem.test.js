@@ -1,5 +1,4 @@
 /* eslint-env jasmine */
-/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CartItem from '../../../components/Cart/CartItem.js';

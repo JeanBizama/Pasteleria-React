@@ -1,5 +1,4 @@
 /* eslint-env jasmine */
-/* eslint-disable jest/no-jasmine-globals */
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import QuantityInput from '../../../components/Cart/QuantityInput.js';
