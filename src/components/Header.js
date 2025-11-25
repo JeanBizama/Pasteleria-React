@@ -102,7 +102,7 @@ export default function Header(){
                       className="user-toggle-label d-inline-flex align-items-center"
                       style={{ color: '#5F4B3C', gap: '4px' }}
                     >
-                      {user.username}
+                      {user?.nombre || user?.email}
                       <span
                         className="material-symbols-outlined"
                         style={{ fontSize: '18px', lineHeight: 1, color: '#5F4B3C' }}

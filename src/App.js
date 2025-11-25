@@ -13,8 +13,20 @@ import PerfilPage from './pages/PerfilPage';
 import RecuperarPage from './pages/RecuperarPage';
 import AdminPage from './pages/AdminPage';
 import './styles/style.css';
+import { useAuth } from './context/AuthContext';
 
 function App(){
+
+  const { isAuthChecking } = useAuth();
+
+    if (isAuthChecking) {
+        return (
+            <div style={{ padding: '50px', textAlign: 'center' }}>
+                Cargando sesión... Por favor, espera.
+            </div>
+        );
+    }
+
   return (
     <BrowserRouter>
       <Routes>

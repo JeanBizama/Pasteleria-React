@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useCallback, useState, useEffect } from 'react';
 
-const AuthContext = createContext();
+const API_BASE_URL = 'http://localhost:8080/api';
 
 function calcularBeneficio(email, fechaNacimiento, cupon) {
   let beneficio = 'No tienes ningún beneficio activo!';
@@ -24,66 +24,298 @@ function calcularBeneficio(email, fechaNacimiento, cupon) {
   return { beneficio, descuento };
 }
 
+const AuthContext = createContext();
+
 export function AuthProvider({ children }){
-  const [users, setUsers] = useState(() => JSON.parse(localStorage.getItem('usuarios')) || []);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('usuarioLogueado')) || null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-  useEffect(() => { localStorage.setItem('usuarios', JSON.stringify(users)); }, [users]);
-  useEffect(() => { if (user) localStorage.setItem('usuarioLogueado', JSON.stringify(user)); else localStorage.removeItem('usuarioLogueado'); }, [user]);
+  const [users, setUsers] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // ensure admin exists (read from localStorage to avoid hook dependency)
-    const stored = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    const adminEmail = 'admin@admin.cl';
-    if (!stored.find(u => u.email === adminEmail)){
-      const admin = { email: adminEmail, username: 'Admin', fechaNacimiento: '1980-01-01', password: 'admin', cupon: '', descuento: 0, beneficio: 'Acceso total como administrador.', rol: 'admin' };
-      setUsers(prev => {
-        const next = [...prev, admin];
-        localStorage.setItem('usuarios', JSON.stringify(next));
-        return next;
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  const applyBenefits = (userData) => {
+    const { beneficio, descuento } = calcularBeneficio(userData.email, userData.fechaNacimiento, userData.cupon || '');
+    return { ...userData, beneficio, descuento };
+  };
+
+  const register = useCallback(async (newUser) => {
+    setIsLoading(true);
+    try {
+      const userToRegister = applyBenefits(newUser);
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+          'Authorization': ''
+         },
+        body: JSON.stringify(userToRegister),
+        
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.mensaje || data.message || 'Error en el registro');
+      }
+
+      localStorage.setItem('authToken', data.token);
+
+      setToken(data.token);
+      setUser(applyBenefits(data));
+
+      return applyBenefits(data);
+
+      } catch (error) {
+      console.error('Error al registrar:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  function register(newUser){
-    const { beneficio, descuento } = calcularBeneficio(newUser.email, newUser.fechaNacimiento, newUser.cupon || '');
-    const u = { ...newUser, beneficio, descuento, rol: newUser.rol || 'cliente' };
-    setUsers(prev => [...prev, u]);
-    return u;
+  const login = useCallback(async (email, password) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Credenciales inválidas');
+      }
+
+      localStorage.setItem('authToken', data.token);
+
+      setToken(data.token);
+      setUser(applyBenefits(data));
+      
+      return applyBenefits(data);
+      } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    setUsers([]);
+    localStorage.removeItem('authToken');
+  }, []);
+
+  const updateProfile = useCallback(async (updates) => {
+    if (!user || !token) throw new Error('No autenticado');
+    setIsLoading(true);
+    try {
+        // La lógica de beneficio ahora es solo para visualización inmediata en el frontend
+        applyBenefits({ ...user, ...updates });
+        
+        const response = await fetch(`${API_BASE_URL}/usuarios/profile`, { 
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify(updates), 
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.mensaje || 'Error al actualizar perfil');
+        }
+
+        setUser(applyBenefits(data)); 
+        return applyBenefits(data);
+
+    } catch (error) {
+        console.error('Error al actualizar perfil:', error);
+        throw error;
+    } finally {
+        setIsLoading(false);
+    }
+  }, [user, token]);
+
+  const fetchUserFromToken = useCallback(async (storedToken) => {
+    if (!storedToken) return null;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/usuarios/profile`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${storedToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+          console.error("Fallo al recuperar perfil:", response.status, response.statusText);
+            
+            try {
+                const errorBody = await response.json();
+                console.error("Cuerpo del error del backend:", errorBody);
+            } catch (e) {
+                console.error("El backend devolvió un error no-JSON.");
+            }
+            // 🛑 La lógica de deslogeo se mantiene
+            localStorage.removeItem('authToken');
+            return null;
+      }
+
+        const userData = await response.json(); 
+        
+        setToken(storedToken);
+        setUser(applyBenefits(userData));
+        return userData;
+
+    } catch (error) {
+        console.error("Error al recuperar el perfil con token:", error);
+        localStorage.removeItem('authToken');
+        return null;
+      }
+    }, [applyBenefits]);
+
+    useEffect(() => {
+    const checkAuth = async () => {
+        const storedToken = localStorage.getItem('authToken');
+        if (storedToken) {
+            // Llama a la API para verificar el token y cargar el usuario
+            await fetchUserFromToken(storedToken); 
+        }
+        
+        setIsAuthChecking(false);
+    };
+    checkAuth();
+  }, [fetchUserFromToken]);
+
+  const listUsers = useCallback(async () => {
+    if (user?.rol !== 'admin' || !token) {
+        throw new Error('Acceso denegado: Se requiere rol de administrador.');
+    }
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/usuarios`, { // Endpoint: /api/usuarios
+        method: 'GET',
+        headers: { 
+          'Authorization': `Bearer ${token}` 
+        },
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.mensaje || 'Error al listar usuarios');
+      
+      const usersWithBenefits = data.map(applyBenefits);
+      setUsers(usersWithBenefits);
+      return usersWithBenefits; 
+
+    } catch (error) {
+      console.error('Error al listar usuarios:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user, token]);
+
+  const addUser = useCallback(async (userData) => {
+    if (user?.rol !== 'admin' || !token) throw new Error('Acceso denegado.');
+    setIsLoading(true);
+    try {
+      // El endpoint de admin espera un objeto Usuario. 
+      const userToSave = { ...userData, contrasena: 'default' }; // Ajustar según el backend
+      
+      const response = await fetch(`${API_BASE_URL}/usuarios`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify(userToSave),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.mensaje || 'Error al agregar usuario');
+      
+      await listUsers(); 
+
+      return applyBenefits(data);
+
+    } catch (error) {
+      console.error('Error al agregar usuario:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user, token, listUsers]);
+
+  function updateUserByIndex(i, data){ 
+    console.error('TODO: Refactorizar updateUserByIndex para usar el ID del usuario y llamar a PUT /api/usuarios/{id}'); 
+    throw new Error('Función no implementada para API. Usar ID del usuario.');
   }
 
-  // admin operations
-  function listUsers(){ return users; }
-  function addUser(userData){ const u = register(userData); return u; }
-  function updateUserByIndex(i, data){ setUsers(prev => prev.map((u, idx) => idx===i ? { ...u, ...data } : u)); }
-  function deleteUserByIndex(i){ setUsers(prev => prev.filter((_, idx) => idx !== i)); }
 
-  function login(email, password){
-    const found = users.find(u => u.email === email);
-    if (!found) throw new Error('Usuario no registrado');
-    if (found.password !== password) throw new Error('Contraseña incorrecta');
-    setUser(found);
-    return found;
-  }
+const deleteUser = useCallback(async (userId) => {
+    if (user?.rol !== 'admin' || !token) {
+        throw new Error('Acceso denegado: Se requiere rol de administrador.');
+    }
+    
+    setIsLoading(true);
+    try {
+        const response = await fetch(`${API_BASE_URL}/usuarios/${userId}`, {
+            method: 'DELETE',
+            headers: { 
+                'Authorization': `Bearer ${token}` 
+            },
+        });
 
-  function logout(){ setUser(null); }
+        if (!response.ok) {
+            let errorMsg = 'Error al eliminar el usuario.';
+            try {
+                const data = await response.json();
+                errorMsg = data.mensaje || errorMsg;
+            } catch (e) {
+            }
+            throw new Error(errorMsg);
+        }
+        await listUsers(); 
 
-  function updateProfile(updates){
-    if (!user) throw new Error('No autenticado');
-    setUsers(prev => prev.map(u => u.email === user.email ? { ...u, ...updates } : u));
-    const updated = { ...user, ...updates };
-    const bf = calcularBeneficio(updated.email, updated.fechaNacimiento, updated.cupon || '');
-    const final = { ...updated, beneficio: bf.beneficio, descuento: bf.descuento };
-    setUser(final);
-    return final;
-  }
+    } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        throw error;
+    } finally {
+        setIsLoading(false);
+    }
+  }, [user, token, listUsers]);
 
   return (
-    <AuthContext.Provider value={{ users, user, register, login, logout, updateProfile, calcularBeneficio, listUsers, addUser, updateUserByIndex, deleteUserByIndex }}>
+    <AuthContext.Provider value={{ 
+      users, // Lista de usuarios (solo para admin)
+      user, 
+      token, // JWT
+      isLoading,
+      isAuthChecking,
+      register, 
+      login, 
+      logout, 
+      updateProfile,
+      calcularBeneficio, 
+      fetchUserFromToken,
+      listUsers, 
+      addUser, 
+      updateUserByIndex, // Necesita refactorización
+      deleteUser, // Necesita refactorización
+    }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
 
 export function useAuth(){ return useContext(AuthContext); }
 
