@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import '../styles/style.css';
 import '../styles/style_productos.css';
 import Header from '../components/Header';
@@ -8,22 +8,17 @@ import ProductList from '../components/Product/ProductList';
 import CategoryFilter from '../components/Product/CategoryFilter';
 
 export default function ProductosPage() {
-  const { products, setProducts } = useProducts();
+  const { products, isLoading, error } = useProducts(); 
   const [filter, setFilter] = useState('all');
-
-  useEffect(() => {
-    // try to load from localStorage seed if any
-    const stored = localStorage.getItem('productos');
-    if (stored) {
-      try { setProducts(JSON.parse(stored)); } catch(e){}
-    }
-  }, [setProducts]);
 
   const categories = useMemo(() => ['tortas-cuadradas','tortas-circulares','postres-individuales','sin-azúcar','pasteleria-tradicional','sin-gluten','veganos','especiales','all'], []);
 
   const displayed = useMemo(() => {
     if (filter === 'all') return products;
-    return products.filter(p => (p.categories || []).includes(filter));
+    return products.filter(p => {
+      const productCategoryName = p.categoria && p.categoria.nombre; 
+      return productCategoryName === filter;
+    });
   }, [products, filter]);
 
   return (
@@ -35,7 +30,14 @@ export default function ProductosPage() {
         onFilterChange={setFilter}
       />
       <main>
+        {/* Mostrar estados de la API */}
+        {error && <p className="error-message">Error al conectar con el servidor: {error}</p>}
+        {isLoading ? (
+          <p className="loading-message">⏳ Cargando nuestros deliciosos productos...</p>
+        ) : (
+          // Solo renderizar ProductList cuando los datos hayan cargado
           <ProductList products={displayed} />
+        )}
       </main>
 
       <Footer />

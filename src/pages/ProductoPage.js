@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import '../styles/style.css';
 import '../styles/style_productos.css';
 import Header from '../components/Header';
@@ -10,19 +10,39 @@ import QuantityInput from '../components/Cart/QuantityInput';
 import Button from '../components/UI/Button';
 import PriceDisplay from '../components/UI/PriceDisplay';
 import { useCart } from '../context/CartContext';
+import { useProducts } from '../context/ProductsContext';
 
 export default function ProductoPage() {
+  const { id: productId } = useParams();
+  const { getProductById } = useProducts();
   const [product, setProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const { addToCart } = useCart();
 
-  useEffect(() => {
-    const raw = localStorage.getItem('productoSeleccionado');
-    if (raw) {
-      try { setProduct(JSON.parse(raw)); } catch(e){ setProduct(null); }
-    }
-  }, []);
 
+useEffect(() => {
+        setIsLoading(true);
+        const foundProduct = getProductById(productId);
+        
+        if (foundProduct) {
+            setProduct(foundProduct);
+        } else {
+           
+            setProduct(null);
+        }
+        setIsLoading(false);
+}, [productId, getProductById]);
+
+  if (isLoading) return (
+        <div>
+             <Header />
+             <main><Container className="text-center py-5">Cargando detalles del producto...</Container></main>
+        </div>
+  );
+
+  
+  
   if (!product) return (
     <div>
       <Header />
@@ -37,11 +57,18 @@ export default function ProductoPage() {
       </main>
     </div>
   );
+  
+  const { 
+        nombre: name, 
+        precio: price, 
+        imagenUrl: image, 
+        descripcion: description 
+  } = product;
 
-  const nombre = product.name || product.id;
-  const precio = Number(product.price || product.precio || 0);
-  const imagen = product.image || product.imagen || '';
-  const descripcion = product.description || product.descripcion || '';
+  const nombre = name || product.id;
+  const precio = Number(price || 0);
+  const imagen = image || '';
+  const descripcion = description || '';
 
   return (
     <div>
@@ -75,7 +102,7 @@ export default function ProductoPage() {
                         className="w-100"
                         onClick={()=>{
                           try{
-                            for(let i=0;i<qty;i++) addToCart(nombre, precio, imagen);
+                            for(let i=0;i<qty;i++) addToCart(product.nombre, product.precio, product.imagenUrl);
                             alert(`${nombre} añadido al carrito`);
                           }catch(err){
                             alert('Se debe iniciar sesion para poder añadir producto');

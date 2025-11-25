@@ -5,7 +5,13 @@ import PriceDisplay from '../UI/PriceDisplay';
 import ProductImage from './ProductImage';
 
 const ProductCard = ({ product }) => {
-  const { name, image, price } = product;
+  const { 
+        nombre: name,     
+        imagenUrl: image,  
+        precio: price       
+    } = product;
+
+    const productPrice = price || 0;
 
   const handleProductSelect = () => {
     localStorage.setItem('productoSeleccionado', JSON.stringify(product));
@@ -21,14 +27,14 @@ const ProductCard = ({ product }) => {
         <Card.Title as="h3" className="text-center product-card-title" style={{fontFamily: 'Pacifico, cursive', color: '#5D4037'}}>
           {name}
         </Card.Title>
-        <div className="product-image-wrap mb-3 w-100">
-          <ProductImage src={image} alt={name} style={{height:'100%', width:'100%', objectFit:'cover'}} />
+        <div className="product-image-wrap mb-3 w-100" style={{ height: '200px', width: '100px' }}>
+          <ProductImage src={image} alt={name} />
         </div>
         <Card.Text className="text-center">
-          Precio: <PriceDisplay price={price} />
+          Precio: <PriceDisplay price={productPrice} />
         </Card.Text>
         <Link
-          to="/producto"
+          to={`/producto/${product.id}`}
           onClick={handleProductSelect}
           className="text-decoration-none mt-auto w-100"
         >
