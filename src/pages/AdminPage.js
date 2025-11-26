@@ -64,13 +64,15 @@ async function handleAddUser(){ // 🛑 ES ASÍNCRONA
     try {
         const userToSave = {
             email: newUser.email,
-            password: newUser.password, // Se envía la contraseña simple para que el backend la hashee
+            contrasena: newUser.password, 
             nombre: newUser.username, 
             fechaNacimiento: newUser.fechaNacimiento,
             cupon: newUser.cupon,
             rol: newUser.rol || 'CLIENTE'
         };
         
+        console.log("Enviando usuario:", userToSave);
+
         await addUser(userToSave); 
 
         setAddingUser(false); 

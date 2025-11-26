@@ -230,8 +230,16 @@ export function AuthProvider({ children }){
     }
     setIsLoading(true);
     try {
-      // El endpoint de admin espera un objeto Usuario. 
-      const userToSave = { ...userData, contrasena: userData.password }; 
+
+      const userToSave = { 
+            email: userData.email,
+            nombre: userData.nombre,
+            fechaNacimiento: userData.fechaNacimiento,
+            cupon: userData.cupon,
+            rol: userData.rol || 'CLIENTE', 
+
+            contrasena: userData.contrasena, }; 
+
       
       const response = await fetch(`${API_BASE_URL}/usuarios`, {
         method: 'POST',
@@ -258,8 +266,7 @@ export function AuthProvider({ children }){
   }, [user, token, listUsers, applyBenefits]);
 
   function updateUserByIndex(i, data){ 
-    console.error('TODO: Refactorizar updateUserByIndex para usar el ID del usuario y llamar a PUT /api/usuarios/{id}'); 
-    throw new Error('Función no implementada para API. Usar ID del usuario.');
+    //FUNCION POR HACER
   }
 
 
