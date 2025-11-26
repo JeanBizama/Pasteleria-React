@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback, useState, useEffect } from 'react';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://pasteleria-backend-production-266e.up.railway.app/api';
 
 function calcularBeneficio(email, fechaNacimiento, cupon) {
   let beneficio = 'No tienes ningún beneficio activo!';

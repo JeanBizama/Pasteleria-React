@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ProductsContext = createContext();
 
-const API_URL = 'http://localhost:8080/api/productos';
+const API_URL = 'https://pasteleria-backend-production-266e.up.railway.app/api/productos';
 
 export function ProductsProvider({ children }) {
   const [products, setProducts] = useState([]);
