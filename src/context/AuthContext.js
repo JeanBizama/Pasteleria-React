@@ -34,11 +34,12 @@ export function AuthProvider({ children }){
   const [isLoading, setIsLoading] = useState(false);
 
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+    
 
-  const applyBenefits = (userData) => {
-    const { beneficio, descuento } = calcularBeneficio(userData.email, userData.fechaNacimiento, userData.cupon || '');
-    return { ...userData, beneficio, descuento };
-  };
+  const applyBenefits = useCallback((userData) => {
+      const { beneficio, descuento } = calcularBeneficio(userData.email, userData.fechaNacimiento, userData.cupon || '');
+      return { ...userData, beneficio, descuento };
+  }, []);
 
   const register = useCallback(async (newUser) => {
     setIsLoading(true);
@@ -72,7 +73,7 @@ export function AuthProvider({ children }){
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [applyBenefits]);
 
   const login = useCallback(async (email, password) => {
     setIsLoading(true);
@@ -101,7 +102,7 @@ export function AuthProvider({ children }){
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [applyBenefits]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -141,7 +142,7 @@ export function AuthProvider({ children }){
     } finally {
         setIsLoading(false);
     }
-  }, [user, token]);
+  }, [user, token, applyBenefits]);
 
   const fetchUserFromToken = useCallback(async (storedToken) => {
     if (!storedToken) return null;
@@ -196,7 +197,7 @@ export function AuthProvider({ children }){
   }, [fetchUserFromToken]);
 
   const listUsers = useCallback(async () => {
-    if (user?.rol !== 'admin' || !token) {
+    if (user?.rol?.toLowerCase() !== 'admin' || !token) {
         throw new Error('Acceso denegado: Se requiere rol de administrador.');
     }
     setIsLoading(true);
@@ -221,14 +222,16 @@ export function AuthProvider({ children }){
     } finally {
       setIsLoading(false);
     }
-  }, [user, token]);
+  }, [user, token, applyBenefits]);
 
   const addUser = useCallback(async (userData) => {
-    if (user?.rol !== 'admin' || !token) throw new Error('Acceso denegado.');
+    if (user?.rol?.toLowerCase() !== 'admin' || !token) {
+        throw new Error('Acceso denegado: Se requiere rol de administrador.');
+    }
     setIsLoading(true);
     try {
       // El endpoint de admin espera un objeto Usuario. 
-      const userToSave = { ...userData, contrasena: 'default' }; // Ajustar según el backend
+      const userToSave = { ...userData, contrasena: userData.password }; 
       
       const response = await fetch(`${API_BASE_URL}/usuarios`, {
         method: 'POST',
@@ -252,7 +255,7 @@ export function AuthProvider({ children }){
     } finally {
       setIsLoading(false);
     }
-  }, [user, token, listUsers]);
+  }, [user, token, listUsers, applyBenefits]);
 
   function updateUserByIndex(i, data){ 
     console.error('TODO: Refactorizar updateUserByIndex para usar el ID del usuario y llamar a PUT /api/usuarios/{id}'); 
@@ -261,7 +264,7 @@ export function AuthProvider({ children }){
 
 
 const deleteUser = useCallback(async (userId) => {
-    if (user?.rol !== 'admin' || !token) {
+    if (user?.rol?.toLowerCase() !== 'admin' || !token) {
         throw new Error('Acceso denegado: Se requiere rol de administrador.');
     }
     
@@ -309,7 +312,7 @@ const deleteUser = useCallback(async (userId) => {
       listUsers, 
       addUser, 
       updateUserByIndex, // Necesita refactorización
-      deleteUser, // Necesita refactorización
+      deleteUser,
     }}>
       {children}
     </AuthContext.Provider>

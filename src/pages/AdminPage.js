@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/style.css';
 import '../styles/style_admin.css';
 import Header from '../components/Header';
-import { useAuth } from '../context/AuthContext';
+import { useAuth} from '../context/AuthContext';
 import { useProducts } from '../context/ProductsContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminPage(){
-    const { users, deleteUserByIndex, updateUserByIndex, addUser } = useAuth();
+    const { user, users, deleteUser, updateUserByIndex, addUser, listUsers, logout } = useAuth(); 
+    const navigate = useNavigate();
     
     const { products, removeProduct, updateProduct, addProduct } = useProducts(); 
     
@@ -17,8 +19,8 @@ export default function AdminPage(){
     const [productForm, setProductForm] = useState({}); 
     const [addingUser, setAddingUser] = useState(false);
     const [addingProduct, setAddingProduct] = useState(false);
-    const [newUser, setNewUser] = useState({ email:'', username:'', password:'', fechaNacimiento:'', cupon:'', rol:'cliente' });
-
+    const [newUser, setNewUser] = useState({ email:'', username:'', password:'', fechaNacimiento:'', cupon:'', rol:'' });
+    const [usersLoaded, setUsersLoaded] = useState(false);
     const [newProduct, setNewProduct] = useState({ 
         nombre:'', 
         descripcion:'', 
@@ -27,12 +29,76 @@ export default function AdminPage(){
         categoria: '' 
     });
 
+    useEffect(() => {
+        if (!user || user?.rol?.toLowerCase() !== 'admin') {
+        return; 
+        }
+
+
+    if (!usersLoaded) {
+            const loadUsers = async () => {
+                try {
+                    await listUsers(); 
+                    setUsersLoaded(true); 
+                } catch (error) {
+                    console.error("Fallo al cargar usuarios:", error);
+                    // Si el backend rechaza, forzar el deslogeo
+                    if (error.message.includes('Acceso denegado')) {
+                        logout(); 
+                    }
+                }
+            };
+            loadUsers();
+        }
+    }, [user, listUsers, usersLoaded, logout]);
+
+
   function startEditUser(i){
     setEditingUser(i);
     setUserForm({...users[i]});
   }
   function cancelEditUser(){ setEditingUser(null); setUserForm({}); }
   function saveUser(i){ updateUserByIndex(i, {...users[i], ...userForm}); setEditingUser(null); }
+
+async function handleAddUser(){ // 🛑 ES ASÍNCRONA
+    try {
+        const userToSave = {
+            email: newUser.email,
+            password: newUser.password, // Se envía la contraseña simple para que el backend la hashee
+            nombre: newUser.username, 
+            fechaNacimiento: newUser.fechaNacimiento,
+            cupon: newUser.cupon,
+            rol: newUser.rol || 'CLIENTE'
+        };
+        
+        await addUser(userToSave); 
+
+        setAddingUser(false); 
+        setNewUser({ email:'', username:'', password:'', fechaNacimiento:'', cupon:'', rol:'' });
+        
+        alert("Usuario agregado con éxito!");
+
+    } catch (err) {
+        // Manejar errores de la API (ej: email duplicado, credenciales inválidas, etc.)
+        alert("Error al agregar usuario: " + (err.message || 'Error desconocido.'));
+    }
+}
+
+  async function handleDeleteUser(userId){
+        if(window.confirm('¿Eliminar usuario? Esta acción es permanente.')) {
+            try {
+                await deleteUser(userId); 
+            } catch (err) {
+                alert("Error al eliminar usuario: " + err.message);
+            }
+        }
+    }
+
+  function handleDeleteProduct(productId) {
+        if(window.confirm('Eliminar producto?')) {
+            removeProduct(productId);
+        }
+    }
 
   function startEditProduct(product) { 
         setEditingProductId(product.id);
@@ -64,12 +130,6 @@ export default function AdminPage(){
         setEditingProductId(null);
     }
 
-  function handleDeleteProduct(productId) {
-        if(window.confirm('Eliminar producto?')) {
-            removeProduct(productId);
-        }
-  }
-
   function handleAddProduct() {
         const newProd = {
             ...newProduct,
@@ -81,6 +141,16 @@ export default function AdminPage(){
         setNewProduct({ nombre:'', descripcion:'', precio: '', imagenUrl:'', categoria: '' });
     }
 
+    if (!user) {
+    navigate('/login');
+    return <div style={{padding: '50px', textAlign: 'center'}}>Redirigiendo a Login...</div>;
+    }
+
+    if (user.rol?.toLowerCase() !== 'admin') {
+        navigate('/');
+        return <div style={{padding: '50px', textAlign: 'center'}}>Acceso denegado. Redirigiendo a Inicio...</div>;
+    }
+
  return (
         <div>
             <Header />
@@ -88,14 +158,77 @@ export default function AdminPage(){
                 <div className="admin-main-content">
                     <h1>Administración</h1>
                     {/* Sección Usuarios (Sin cambios) */}
-                    <section>
-                        <h2>Usuarios</h2>
-                        {/* ... tabla de usuarios (Sin cambios en este ejemplo) ... */}
-                        <button id="btnAgregarUsuario" style={{marginTop:8}} onClick={()=>setAddingUser(true)}>Agregar Usuario</button>
-                    </section>
-
                     <hr/>
-                    
+                    <section>
+                        <h2>Gestión de Usuarios ({users.length})</h2>
+                        <table className="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/* Mapeamos la lista de usuarios */}
+                                {users.map((u) => (
+                                    <tr key={u.id}>
+                                        <td>{u.id}</td>
+                                        
+                                        {/* Nombre (campo editable) */}
+                                        <td>
+                                            {editingUser === u.id ? (
+                                                <input 
+                                                    value={userForm.nombre || ''} 
+                                                    onChange={e => setUserForm({ ...userForm, nombre: e.target.value })} 
+                                                />
+                                            ) : u.nombre}
+                                        </td>
+                                        
+                                        {/* Correo electrónico */}
+                                        <td>{u.email}</td>
+                                        
+                                        {/* Rol */}
+                                        <td>{u.rol}</td>
+                                        
+                                        {/* Acciones (Editar/Eliminar) */}
+                                        <td>
+                                            {editingUser === u.id ? (
+                                                <>
+                                                    <button onClick={saveUser}>Guardar</button>
+                                                    <button onClick={cancelEditUser}>Cancelar</button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button onClick={() => startEditUser(u)}>Editar</button>
+                                                    <button onClick={() => handleDeleteUser(u.id)}>Eliminar</button> 
+                                                </>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        
+                        <button id="btnAgregarUsuario" style={{marginTop:8}} onClick={()=>setAddingUser(true)}>Agregar Usuario</button>
+                        
+                        {/* 🚀 Formulario de Agregar Usuario */}
+                        {addingUser && (
+                            <div style={{marginTop:12}}>
+                                {/* 💡 Usamos 'username' para el input, pero mapeamos a 'nombre' al guardar */}
+                                <input placeholder="Nombre" value={newUser.username} onChange={e=>setNewUser({...newUser,username:e.target.value})} />
+                                <input placeholder="Correo" value={newUser.email} onChange={e=>setNewUser({...newUser,email:e.target.value})} />
+                                <input placeholder="Contraseña" type="password" value={newUser.password} onChange={e=>setNewUser({...newUser,password:e.target.value})} />
+                                <input placeholder="Fecha Nacimiento (AAAA-MM-DD)" value={newUser.fechaNacimiento} onChange={e=>setNewUser({...newUser,fechaNacimiento:e.target.value})} />
+                                <input placeholder="Cupón" value={newUser.cupon} onChange={e=>setNewUser({...newUser,cupon:e.target.value})} />
+                                <input placeholder="Rol" value={newUser.rol} onChange={e=>setNewUser({...newUser,rol:e.target.value})} />
+                                <button onClick={handleAddUser}>Guardar Usuario</button>
+                                <button onClick={()=>setAddingUser(false)}>Cancelar</button>
+                            </div>
+                        )}
+                    </section>
                     <section>
                         <h2>Productos</h2>
                         <table className="admin-table">

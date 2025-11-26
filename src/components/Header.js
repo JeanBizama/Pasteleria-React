@@ -13,7 +13,6 @@ export default function Header(){
 
   function handleLogout(){
     logout();
-    navigate('/');
   }
 
   return (
@@ -57,7 +56,7 @@ export default function Header(){
             <Nav.Link as={Link} to="/contacto" style={{color: '#fff'}} className="nav-link-custom">Contacto</Nav.Link>
 
             {user ? (
-              user.rol === 'admin' ? (
+              user?.rol?.toLowerCase() === 'admin' ? (
                 <>
                   <Nav.Link onClick={() => navigate('/admin')} className="d-lg-none" style={{color: '#fff'}}>Administración</Nav.Link>
                   <Nav.Link onClick={handleLogout} className="d-lg-none" style={{color: '#fff'}}>Cerrar sesión</Nav.Link>
@@ -114,7 +113,7 @@ export default function Header(){
                   id="user-dropdown"
                   align="end"
                 >
-                  {user.rol === 'admin' ? (
+                  {user?.rol?.toLowerCase() === 'admin' ? (
                     <NavDropdown.Item onClick={() => navigate('/admin')}>
                       Administración
                     </NavDropdown.Item>
